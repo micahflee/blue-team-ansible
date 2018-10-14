@@ -29,4 +29,15 @@
       api_token={{ do_token }}
     register: ctf_base
 
-  - debug: msg="IP is {{ ctf_base.droplet.ip_address }}"
+  # Save the info about the droplet to disk, so we can load it later to when we
+  # want to delete this droplet, or run other playbooks on it
+  - name: ensure local droplets directory exists
+    file: path=droplets state=directory mode=0755
+
+  - name: save ctf_base droplet id to disk
+    copy: content="{{ ctf_base.droplet.id }}" dest="droplets/ctf-base_id.txt"
+
+  - name: save ctf_base droplet ip address to disk
+    copy: content="{{ ctf_base.droplet.ip_address }}" dest="droplets/ctf-base_ip_address.txt"
+
+  - debug: msg="ctf-base IP address is {{ ctf_base.droplet.ip_address }} and DigitalOcean id is {{ ctf_base.droplet.id }}"
