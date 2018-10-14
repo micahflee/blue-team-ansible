@@ -19,3 +19,17 @@
       ssh_pub_key={{ lookup('file', '~/.ssh/id_rsa.pub') }}
       api_token={{ do_token }}
     register: ctf_ssh_key
+
+  - name: ensure droplet droplet-ctf-base exists
+    digital_ocean: >
+      state=present
+      command=droplet
+      name=droplet-ctf-base
+      size_id=512mb
+      region_id=sfo2
+      image_id=ubuntu-18-04-x64
+      ssh_key_ids={{ ctf_ssh_key.ssh_key.id }}
+      api_token={{ do_token }}
+    register: droplet_ctf_base
+
+  - debug: msg="IP is {{ droplet_ctf_base.droplet.ip_address }}"
