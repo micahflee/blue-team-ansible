@@ -17,3 +17,11 @@ Install python2 dependencies with pip (you made need to install `python-pip` fir
 ```
 pip install -r requirements.txt
 ```
+
+## Deploying the CTF base server
+
+Running this command will create a new DO droplet, called `droplet_ctf_base`, which you can ssh into as root. (It's a 512mb RAM VPS, located in a data center in San Francisco.)
+
+```
+ansible-playbook digitalocean.yml
+```
