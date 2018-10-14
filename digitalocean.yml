@@ -1,0 +1,21 @@
+---
+- hosts: digitalocean
+
+  vars:
+    do_token: "{{ lookup('env', 'DO_API_KEY') }}"
+
+  tasks:
+  - name: ensure ssh key exists
+    user: >
+      name={{ ansible_user_id }}
+      generate_ssh_key=yes
+      ssh_key_file=.ssh/id_rsa
+
+  - name: ensure key exists at DigitalOcean
+    digital_ocean: >
+      state=present
+      command=ssh
+      name=ctf_ssh_key
+      ssh_pub_key={{ lookup('file', '~/.ssh/id_rsa.pub') }}
+      api_token={{ do_token }}
+    register: ctf_ssh_key
